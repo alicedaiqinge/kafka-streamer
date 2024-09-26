@@ -20,15 +20,20 @@ public class KafkaCustomerStreamer {
 
     @KafkaListener(topics = "CustomerInput", groupId = "customer-group")
     public void consume(String message) {
-        // Deserialize message
         String[] parts = message.split(",");
         Customer customer = new Customer(parts[0], parts[1], LocalDate.parse(parts[2]));
 
-        // Check age and publish to the appropriate topic
-        if (customer.getAge() % 2 == 0) {
+        if (isEvenTopic(customer.getAge())) {
             kafkaTemplate.send(EVEN_TOPIC, message);
         } else {
             kafkaTemplate.send(ODD_TOPIC, message);
         }
+    }
+    
+    private boolean isEvenTopic(Integer age) {
+    	if (age % 2 == 0) {
+    		return true;
+    	}
+    	return false;
     }
 }

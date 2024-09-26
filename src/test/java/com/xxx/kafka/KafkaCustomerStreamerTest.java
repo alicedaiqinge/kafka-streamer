@@ -3,26 +3,27 @@ package com.xxx.kafka;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.kafka.core.KafkaTemplate;
 
-import java.time.LocalDate;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.eq;
 
+@SpringBootTest(classes = KafkaApplication.class)  
 public class KafkaCustomerStreamerTest {
 
     @Autowired
     private KafkaCustomerStreamer kafkaCustomerStreamer;
 
-    @Autowired
+    @MockBean
     private KafkaTemplate<String, String> kafkaTemplate;
 
     @Test
     public void testCustomerEven() {
-        // Prepare a customer with an even age
         String message = "John,Doe,2000-01-01"; // Age is 24
-
         kafkaCustomerStreamer.consume(message);
 
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
@@ -33,9 +34,7 @@ public class KafkaCustomerStreamerTest {
 
     @Test
     public void testCustomerOdd() {
-        // Prepare a customer with an odd age
         String message = "Jane,Doe,2001-01-01"; // Age is 23
-
         kafkaCustomerStreamer.consume(message);
 
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
