@@ -1,5 +1,6 @@
 package com.xxx.kafka;
 
+import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
@@ -28,5 +29,15 @@ public class KafkaConfig {
     @Bean
     public KafkaTemplate<String, String> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
+    }
+    
+    @Bean
+    public NewTopic evenTopic() {
+        return new NewTopic("CustomerEVEN", 1, (short) 1);
+    }
+
+    @Bean
+    public NewTopic oddTopic() {
+        return new NewTopic("CustomerODD", 1, (short) 1);
     }
 }
